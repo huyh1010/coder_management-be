@@ -3,8 +3,8 @@ const {
   getTasks,
   createTask,
   getSingleTask,
-  editTask,
   deleteTask,
+  updateTask,
 } = require("../controllers/task.controller");
 const { body, param } = require("express-validator");
 const router = express.Router();
@@ -44,7 +44,7 @@ router.get("/:id", param("id").exists().isMongoId(), getSingleTask);
  *  @access private, manager
 
  */
-router.put("/:id", param("id").exists().isMongoId(), editTask);
+router.put("/:id", param("id").exists().isMongoId(), updateTask);
 
 /**
  * @route delete api/tasks/:id

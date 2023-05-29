@@ -6,9 +6,9 @@ const { validationResult } = require("express-validator");
 const userController = {};
 
 userController.getUsers = async (req, res, next) => {
-  let { page } = req.query;
+  let { page, limit } = req.query;
   page = parseInt(req.query.page) || 1;
-  limit = 3;
+  limit = parseInt(req.query.limit) || 10;
   try {
     let offset = limit * (page - 1);
     let { name } = req.query;
@@ -72,15 +72,20 @@ userController.createUser = async (req, res, next) => {
       throw new AppError("400", "Bad Request", "Create user Error!");
     }
 
-    const created = await User.create(info);
-    sendResponse(
-      res,
-      200,
-      true,
-      { user: created },
-      null,
-      "Create User Successfully"
-    );
+    const name = await User.findOne({ name: info.name });
+    if (name) {
+      throw new AppError("400", "Bad Request", "User already exist!");
+    } else {
+      const created = await User.create(info);
+      sendResponse(
+        res,
+        200,
+        true,
+        { user: created },
+        null,
+        "Create User Successfully"
+      );
+    }
   } catch (err) {
     next(err);
   }

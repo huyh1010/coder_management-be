@@ -7,6 +7,7 @@ const taskSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ["pending", "working", "review", "done", "archive"],
+      default: "pending",
     },
     assignee: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
     isDeleted: { type: Boolean, default: false },
